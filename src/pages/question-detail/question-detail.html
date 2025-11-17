@@ -1,0 +1,172 @@
+<!--
+  Generated template for the QuestionDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!DOCTYPE html>
+<html>
+  <ion-header>
+
+    <ion-navbar>
+        <ion-row>
+            <ion-col>
+                <ion-title>提问 {{groupname}} 
+                  <span *ngIf="bKWhighlight==true" class="hightlight">高亮</span>
+                </ion-title>
+            </ion-col>
+            <ion-col>
+                
+            </ion-col>
+        </ion-row>
+      
+    </ion-navbar>
+  
+  </ion-header>
+
+<ion-content padding>
+
+  <div *ngIf="isEditing==true">     <!--编辑模式-->
+    <!--编辑标题和内容-->
+    <ion-list>
+      <ion-item>
+        <ion-label>标题</ion-label>
+        <ion-input type="text" [(ngModel)]="title_edit"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>内容</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-textarea rows="4" style="font-family: inherit; font-size: large;" id="content_edit" [(ngModel)]="content_edit"></ion-textarea>
+
+    
+  <!--显示图片-->
+  <div class="row" *ngFor="let i of imgUIRows">
+  <div class="col"><img *ngIf="imglist[i*5]!=undefined" (click)="viewImage(i*5)" src="{{globals.server}}{{imglist[i*5].path}}"/></div>
+  <div class="col"><img *ngIf="imglist[i*5+1]!=undefined" (click)="viewImage(i*5+1)" src="{{globals.server}}{{imglist[i*5+1].path}}"/></div>
+  <div class="col"><img *ngIf="imglist[i*5+2]!=undefined" (click)="viewImage(i*5+2)" src="{{globals.server}}{{imglist[i*5+2].path}}"/></div>
+  <div class="col"><img *ngIf="imglist[i*5+3]!=undefined" (click)="viewImage(i*5+3)" src="{{globals.server}}{{imglist[i*5+3].path}}"/></div>
+  <div class="col"><img *ngIf="imglist[i*5+4]!=undefined" (click)="viewImage(i*5+4)" src="{{globals.server}}{{imglist[i*5+4].path}}"/></div>
+  </div>
+<!--对发帖用户显示编辑完成取消按钮-->
+  <ion-row>
+    <ion-col><button ion-button small *ngIf="buserableEdit==true" (click)="onClickEditBtn()">{{EditBtnTxt}}</button>   </ion-col>
+    <ion-col><button ion-button small (click)="onClickCancelEditBtn()">取消</button>   </ion-col>
+  </ion-row>
+
+  </div>
+  
+  <!---------------------------------------------------------------------------->
+  <div *ngIf="isEditing==false">  <!--非编辑模式-->
+    
+    <div class="midsize row">
+      <div class="titlesize col">标题：{{title}}</div> <div class="titlesize"><span>{{status_text}}</span></div>
+    </div> 
+     
+    <div  class="midsize row">
+      <div class="datefontsize col">作者：{{author}}</div>
+    </div>
+    <div  class="midsize row">
+      <div class="datefontsize col">发表时间:{{createdate}}</div>
+    </div>
+    <!--修改历史-->
+    <ion-list>
+        <ion-row *ngFor="let title_modified_date of title_modified_dates">
+        <div class="midsize row">
+          <div class="datefontsize grey col">该贴标题于{{title_modified_date}}修改过</div>
+        </div>
+      </ion-row>
+      </ion-list>
+      <ion-list>
+          <ion-row *ngFor="let content_modified_date of content_modified_dates">
+          <div class="midsize row">
+              <div class="datefontsize grey col">该贴内容于{{content_modified_date}}修改过</div>
+          </div>
+        </ion-row>
+      </ion-list>
+
+  <div class="midsize row">
+    <div class="datefontsize col-20">浏览:</div>  <div class="view datefontsize col-10">{{viewcount}}</div> <div class="col"></div>
+  </div>
+  <!--对发帖用户显示编辑按钮-->
+  <div class="midsize row">
+    <button ion-button small *ngIf="buserableEdit==true" (click)="onClickEditBtn()">{{EditBtnTxt}}</button>
+  </div>
+<div class="pmain_text" style="font-size: large;" (click)="switchKWHighLight()" [innerHtml]="assembleHTML(renderedContent)"></div> 
+<br />
+<div *ngIf="storydateDisplay != ''">
+  <span class="midsize">故事时间：{{storydateDisplay}}</span>
+  <button *ngIf="buserableEdit==true" ion-button small (click)="modifyStorydate()">修改</button>
+  <button *ngIf="buserableEdit==true" ion-button small (click)="deleteStorydate()">删除</button>
+</div>
+<div *ngIf="storydateDisplay == ''">
+  <span class="midsize">故事时间：无</span>
+  <button *ngIf="buserableEdit==true" ion-button small (click)="modifyStorydate()">添加时间</button>
+</div>
+
+  <!--提示图片加载中...-->
+  <div *ngIf="imglist.length > 0 && picLoadComplete==false" style="left: 35%; color:chocolate;" class="titlesize row">
+    <div class="col titlesize">图片加载中...</div>
+  </div>    
+<!--显示图片-->
+<div class="row" *ngFor="let i of imgUIRows">
+<div class="col"><img *ngIf="imglist[i*5]!=undefined" (click)="viewImage(i*5)" src="{{globals.server}}{{imglist[i*5].path}}"/></div>
+<div class="col"><img *ngIf="imglist[i*5+1]!=undefined" (click)="viewImage(i*5+1)" src="{{globals.server}}{{imglist[i*5+1].path}}"/></div>
+<div class="col"><img *ngIf="imglist[i*5+2]!=undefined" (click)="viewImage(i*5+2)" src="{{globals.server}}{{imglist[i*5+2].path}}"/></div>
+<div class="col"><img *ngIf="imglist[i*5+3]!=undefined" (click)="viewImage(i*5+3)" src="{{globals.server}}{{imglist[i*5+3].path}}"/></div>
+<div class="col"><img *ngIf="imglist[i*5+4]!=undefined" (click)="viewImage(i*5+4)" src="{{globals.server}}{{imglist[i*5+4].path}}"/></div>
+</div>
+
+<div>
+  <button ion-button small (click)="uploadImagefromImagePicker()">添加图片</button>   <!--添加图片按钮-->
+</div>
+
+<!--显示已有评论-->
+<ion-list>
+<ion-row *ngFor="let comment of allcomments">
+    <div class="item" style="width:100%;">
+        <!--显示顶层评论-->
+        <div class="midsize row">
+          <div class="midsize col-5">  <ion-icon *ngIf="comment.isanswer==true" name="checkmark"></ion-icon></div>          
+          <div class="midsize col-5"> <button *ngIf="hasApplyBtn==true" ion-button small (click)="markAnswer(comment.id, comment.replyfrom)">采纳</button> </div>
+          <div class="midsize underline "><label (click)="replyComment(comment.replyfrom, comment.id, text)">{{comment.replyfrom}} 评论</label></div>
+          <div class="midsize datefontsize grey col">{{comment.comment_time}}</div>
+        </div>
+        <div class="midsize row">
+        <div class="midsize col-5"></div>
+        <div class="midsize col " style="width:100%;">{{comment.comment}}</div>
+        </div>
+          <!--显示下级评论-->
+          <ion-row *ngFor="let reply of comment.replies">
+          <div class="item" style="width:100%;">
+            <div class="midsize row">
+              <div class="midsize col-10"></div>
+              <div class="midsize col"><span class="underline" (click)="replyComment(reply.from, comment.id, text)">{{reply.from}}</span>
+                <span> 回复 {{reply.to}} </span>
+                </div>  
+              <div class="midsize datefontsize grey ">  {{reply.reply_time}}</div>
+            </div>
+            <div class="midsize row">
+              <div class="midsize col-10"></div> <div><ion-icon *ngIf="reply.isanswer==true" name="checkmark"></ion-icon></div>
+              <div class="midsize col-10">   <button *ngIf="hasApplyBtn==true" ion-button small (click)="markAnswer(reply.id, reply.from)">采纳</button></div>
+              <div class="midsize item-text-wrap col ">{{reply.reply}}</div>
+            </div>
+          </div>
+        </ion-row>
+      </div>
+</ion-row>
+</ion-list>  
+</div>
+
+</ion-content>
+
+<ion-footer>
+  <!--发表新评论-->
+  <div *ngIf="isEditing==false" class="midsize row">
+      <div class="midsize col col-80"><ion-input type="text" placeholder="发表下看法" [(ngModel)]="text"></ion-input></div>
+      <div class="midsize col"><button ion-button color="light"  (click)="submitComment(comment, id)">提交</button></div>
+    </div>
+  
+</ion-footer>
+</html>

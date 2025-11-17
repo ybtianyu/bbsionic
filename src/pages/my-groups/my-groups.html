@@ -1,0 +1,54 @@
+<!--
+  Generated template for the MyGroupsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!DOCTYPE html>
+<html>
+<ion-header>
+  <!--script src="E:/ionic/hello/node_modules/vconsole/distvconsole.min.js"></script>
+  <script>
+    var vConsole = new VConsole();
+    console.log("hello world");
+  </script-->
+  <ion-navbar>
+    <ion-title>我的组</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+    <ion-list>
+      <!--标题栏-->
+      <div class="midsize row">
+        <div class="midsize col col-5">喜好</div>
+        <div class="midsize col col-30">名称</div>
+        <div class="midsize col col-15">角色</div>
+        <div class="midsize col col-10">更多</div>
+        <div class="midsize col" >提醒</div>
+      </div>
+      <!--注意：使用了class="row",此处的div不能使用属性 ion-item，否则不能显示内容-->
+        <div *ngFor="let group of groups">
+        <!--ion-row>
+        <ion-col>
+        <ion-checkbox [(ngModel)]="group.group.isFavorite" (ionChange)="onChangeFavoriteSel($event, group)"></ion-checkbox>
+        </ion-col-->
+
+        <div class="midsize row">
+            <div class="midsize col col-5"><ion-checkbox [(ngModel)]="group.group.isFavorite" (ionChange)="onChangeFavoriteSel($event, group)"></ion-checkbox></div>
+            <div class="midsize col col-30">{{group.group.groupname}}</div>
+            <div class="midsize col col-10"  *ngIf="group.group.isAdmin==false && group.group.isJoined==true">[成员]</div>
+            <div class="midsize col col-10" *ngIf="group.group.isAdmin==true">[管理员]</div>
+            <div class="midsize col col-10" *ngIf="group.group.isJoined==false">[友邻]</div>
+            <div class="midsize col col-10"><button ion-button small (click)="EnterGroupInfoPage(group.group.groupid, group.group.groupname)">更多</button></div>
+            <div class="col" *ngIf="group.group.isAdmin==true  && group.reqCnt>0">{{group.reqCnt}}条请求</div>
+        </div>
+
+        <!--/ion-row-->
+        </div>
+    </ion-list>
+    <button ion-button (click)="newGroup()">新创建一个组</button>
+</ion-content>
+</html>

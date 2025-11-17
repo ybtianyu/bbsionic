@@ -1,0 +1,51 @@
+<!--
+  Generated template for the WideSocialPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <div class="col" *ngIf="springfestival.isSpringFestival"> <!--新年快乐-->
+    <img src="{{globals.server}}img_system/newspring2.png"/>  <!--节日祝福-->
+  </div>
+
+<!--div *ngIf="bfocusSearch==true">
+<ion-row>
+    <ion-col></ion-col>
+  <ion-col><span><ion-label>常用标签</ion-label></span>
+       <span>
+        <button (click)="searchGroupsByTag('旅游')">旅游</button>
+        <button (click)="searchGroupsByTag('亲子')">亲子</button>
+        <button (click)="searchGroupsByTag('社区')">社区</button>
+      </span>
+  </ion-col>
+
+</ion-row>
+</div-->
+
+
+</ion-header>
+
+<ion-content padding>
+<div class="midsize row">
+  <ion-input type="text"  style="text-align: center;" placeholder="搜索" [(ngModel)]="name_input" (ionBlur)="blurSearchInput()" (ionFocus)="focusSearchInput()"></ion-input>
+</div>
+
+<!--热点-->
+<div class="midsize" *ngIf="RTCtrl != null && RTCtrl.bhasReceivedLastData==false">获取数据失败</div>
+<div class="midsize" *ngIf="globals.widesocialRTCtrl != null && globals.widesocialRTCtrl.searchrlts.getlist().length==0">没有推荐的部落</div>
+
+<ion-list *ngIf="globals.widesocialRTCtrl != null && globals.widesocialRTCtrl.searchrlts.getlist().length>0">
+<ion-row class="midsize">推荐</ion-row>
+<div *ngFor="let tribe of globals.widesocialRTCtrl.getsearchrlts().getlist()" type="item-text-wrap">
+  <div class="row midsize">部落：{{tribe.groupname}}</div>
+  <div class="midsize">人数：{{tribe.memberNbr}}</div>
+  <!--div>点赞数：{{tribe.dianzan}}</div-->
+  <div>
+    <span *ngIf="tribe.isprivate==false"> <button small ion-button (click)="enterGroupbbs(tribe.groupid)">进入</button></span>      
+    <span *ngIf="tribe.isprivate==false"> <button small ion-button (click)="viewGroupInfoPage(tribe)">查看</button></span>
+  </div>
+</div>
+</ion-list>
+
+</ion-content>

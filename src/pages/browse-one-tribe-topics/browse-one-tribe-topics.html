@@ -1,0 +1,110 @@
+<!--
+  Generated template for the BrowseOneTribeTopicsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>部落：{{group.groupname}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  
+    <ion-refresher (ionRefresh)="doRefresh($event)"> 
+        <ion-refresher-content
+            pullingIcon="arrow-dropdown"
+            pullingText="下拉刷新"
+            refreshingSpinner="circles"
+            refreshingText="刷新..."> 
+        </ion-refresher-content>
+        <ion-refresher-content > 
+      </ion-refresher-content>
+      </ion-refresher>
+
+      <div  *ngIf="RTCtrl!=null">
+        <div  *ngFor="let group of RTCtrl.getgroups()" >
+          <!-- bbsitem 列表-->
+          <div *ngIf="RTCtrl.bbs_groups.get(group.groupid)!=undefined">
+            <ion-list>
+            <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).getlist()" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+        <!--标题 同喜好头条-->
+        <div *ngIf="bbs.isvote==true">
+          <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+          <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+          <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+          <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+          </span>
+          <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+          </span>
+      </div>
+      <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+          <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+          <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+          <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+          <!--标题：与投票相同，因为标识前缀长度是一样的-->
+          <span *ngIf="bbs.newupdatestatus==0">
+                <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+                <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+          </span>
+          <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+                <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+                <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+          </span>
+      </div>
+      <div *ngIf="bbs.question_issolved!=-1">
+        <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+        <!--标题：与投票相同，因为标识前缀长度是一样的-->
+        <span *ngIf="bbs.newupdatestatus==0">
+              <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+              <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+        </span>
+        <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+              <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+              <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+        </span>
+      </div>
+      
+            <h2>
+              <span>发表：</span> <span>{{bbs.createdate.substring(0,16)}} |{{bbs.authorname}}</span>
+            </h2>
+            <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+            <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+                <span>{{bbs.lastupdatedate.substring(0,16)}}</span>
+                | {{bbs.lastupdateuser}}
+            </h2>
+            <div> <!--提问问题状态-->
+              <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+              <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+            </div>
+            </div>
+          </ion-list>
+
+          <div class="midsize red" *ngIf="RTCtrl.hasMoreDataofGroup(group.groupid) == false">已经拉到底了</div>
+          </div>
+      
+        </div>
+        </div>
+
+      <ion-fab right middle>
+        <button *ngIf="bGroupMember==false" ion-fab (click)="jointoGroup()">加入</button>
+        <button *ngIf="bGroupMember==true" ion-fab (click)="clickNewPost()">发帖</button>
+        <button *ngIf="bGroupMember==true" ion-fab (click)="clickNewQuestion()">提问</button>
+      </ion-fab>
+
+      <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px" immediate-check="false">
+          <ion-infinite-scroll-content
+            loadingText={{globals.loadMoreScrollText}}>
+          </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+</ion-content>

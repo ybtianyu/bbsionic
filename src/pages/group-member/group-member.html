@@ -1,0 +1,39 @@
+<!--
+  Generated template for the GroupMemberPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>查看组成员：{{groupname}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<div class="midsize">
+    <!--ion-list>
+        <ion-item>
+          <ion-label fixed>用户名或昵称</ion-label>
+          <ion-input type="text" [(ngModel)]="name_input"></ion-input>
+        </ion-item>
+        <ion-item>
+          <button ion-button (click)="searchName(name_input)">搜索</button>
+        </ion-item>
+      </ion-list-->
+      成员数：{{userlist.length}}
+      <ion-list ion-row *ngFor="let user of userlist">
+        <div class="row">
+        <div class="col-5"><ion-label fixed *ngIf="user.isadmin==true">管理员</ion-label></div>
+        <div class="col-5"><ion-label fixed *ngIf="user.isadmin==false"> </ion-label></div>
+        <div class="col-30"><ion-label fixed>{{user.user.username}}</ion-label></div>
+        <div class="col"><button ion-button (click)="viewUserGroupInfo(user.user.username)">查看</button></div>
+        <!--没有禁用管理员权限，且操作对象不是管理员自己-->
+        <ion-col><button ion-button *ngIf="disableAdminconfig==false && bgpAdmin==true && user.user.username!=globals.username" (click)="removeFromGroup(user.user.username)">移出该组</button></ion-col>
+        </div>
+      </ion-list>
+</div>
+</ion-content>

@@ -1,0 +1,740 @@
+<!--
+  Generated template for the BbsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!--Side Menu start-->
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav #content swipeBackEnabled="false" ></ion-nav>
+<ion-menu side="left"  *ngIf="globals.isLogin == true" [content]="content" type="overlay">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>组</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let group of menuGroups.short_menuGroups">
+        <div class="row" menuClose (click)="switchSingleGroup_UI(group.groupid)">
+        <div *ngIf="singleGroup!= undefined && group.groupid==singleGroup.groupid" class="col blue">
+          {{group.name}}
+        </div>
+        <div *ngIf="singleGroup!=undefined && group.groupid != singleGroup.groupid" class="col">
+          {{group.name}}
+        </div>
+        <div *ngIf="singleGroup==undefined" class="col">
+          {{group.name}}
+        </div>
+        <div *ngIf="group.isFavorite==true" class="red col">*</div>
+        </div>
+        </ion-item>
+
+      <ion-row *ngFor="let group of menuGroups.long_menuGroups">
+        <div menuClose (click)="switchSingleGroup_UI(group.groupid)">
+          <div *ngIf="singleGroup!=undefined && group.groupid==singleGroup.groupid" class="col blue">
+            {{group.name}}
+          </div>
+          <div *ngIf="singleGroup!=undefined && group.groupid != singleGroup.groupid" class="col">
+            {{group.name}}
+          </div>
+          <div *ngIf="singleGroup==undefined" class="col">
+            {{group.name}}
+          </div>
+          <div *ngIf="group.isFavorite==true" class="red col">*</div>
+        </div>
+        </ion-row>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+<!--Side Menu ends-->
+
+<ion-header>
+  <ion-row>
+    <ion-col>
+      <button ion-button menuToggle><ion-icon name="menu"></ion-icon> </button>
+    </ion-col>
+    <!--{{DisplayGroupMode}}-->
+    <ion-col *ngIf="bSearchResult==false">
+      <ion-title *ngIf="globals.bbspage_title_show_length >= DisplayGroupMode.length ">{{DisplayGroupMode}}</ion-title>
+      <ion-title *ngIf="globals.bbspage_title_show_length < DisplayGroupMode.length">{{DisplayGroupMode.substring(0,globals.bbspage_title_show_length - 3)}}...</ion-title>
+    </ion-col>
+    <ion-col *ngIf="bSearchResult==false">
+      <ion-title></ion-title>  <!--留空-->
+    </ion-col>
+
+    <div *ngIf="bSearchResult==true">
+      <div class="midsize" *ngIf="24 >= DisplayGroupMode.length ">{{DisplayGroupMode}}</div>
+      <div class="midsize"  *ngIf="24 < DisplayGroupMode.length">{{DisplayGroupMode.substring(0,24 - 3)}}...</div>
+    </div>
+    <ion-col *ngIf="bSearchResult==true">
+      <ion-title></ion-title>  <!--留空-->
+    </ion-col>
+  </ion-row>
+
+
+  <!--ion-row *ngIf="bSearchResult==true">
+    <span>
+      <button ion-button menuToggle><ion-icon name="menu"></ion-icon> </button>
+    </span>
+  <span>
+    <div class="midsize" *ngIf="21 >= DisplayGroupMode.length ">{{DisplayGroupMode}}</div>
+    <div class="midsize" *ngIf="21 < DisplayGroupMode.length">{{DisplayGroupMode.substring(0,20 - 3)}}...</div>
+  </span>
+  </ion-row-->
+
+  <div *ngIf="springfestival.isSpringFestival">
+    <div class="col"> <!--新年快乐-->
+      <img src="{{globals.server}}img_system/newspring2.png"/>  <!--节日祝福-->
+    </div>
+  </div>
+  <!--div class="red largesize" *ngIf="springfestival.isSpringFestival">新年快乐</div-->  <!--节日祝福-->
+</ion-header>
+<!--Use ion-content tag to enable scroll of content-->
+<ion-content>
+  
+  <!--button ion-button (click)="onResume()">resume</button>
+  <button ion-button (click)="onPause()">pause</button-->
+<ion-fab  *ngIf="bSearchResult==true" right top><button ion-fab  (click)="onCloseSearchResult()">关闭</button></ion-fab>
+<!--未登录，或未设置的提示-->
+  <div class="midsize row">{{NotReadyPrompt}}</div>
+  <div class="midsize row">{{connectPrompt}}</div>
+  <!--单组定制模式-->
+  <div *ngIf="bSearchResult==true && bCustomizedSingleGroup==true">
+    <div *ngIf="springfestival.isSpringFestival"><br><br><br><br><br><br></div> <!--留空-->
+    <div  *ngIf="RTCtrl!=null">
+    <div  *ngFor="let group of RTCtrl.getgroups()" >
+      <!-- bbsitem 列表-->
+      <div *ngIf="RTCtrl.bbs_groups.get(group.groupid)!=undefined">
+      <div  *ngFor="let mark of RTCtrl.bbs_groups.get(group.groupid).calendarMarks" >
+        <ion-row class="midsize">{{mark.yearmonth}}</ion-row><br>
+        <ion-list>
+        <div ion-item *ngFor="let bbs of mark.bbslist" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+  </div>
+  
+  <h2>
+    <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+  </h2>
+  <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+  <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+      <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+      | {{bbs.lastupdateuser}}
+  </h2>
+  <div> <!--提问问题状态-->
+    <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+    <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+  </div>
+        </div>
+      </ion-list>
+  
+      </div>
+      <div class="midsize red" *ngIf="RTCtrl.hasMoreDataofGroup(group.groupid) == false">已经拉到底了</div>
+      </div>
+  
+    </div>
+    </div>
+  </div>   <!--单组定制模式-->
+
+  <!--单组浏览模式-->
+  <div *ngIf="bSearchResult==false && bSingleGroupMode== true">
+    <ion-refresher *ngIf="globals.isLogin==true" (ionRefresh)="doRefresh($event)"> 
+      <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="刷新"
+          refreshingSpinner="circles"
+          refreshingText="更新中..."> 
+      </ion-refresher-content>
+      <ion-refresher-content > 
+    </ion-refresher-content>
+    </ion-refresher>
+  <div *ngIf="springfestival.isSpringFestival"><br><br><br><br><br><br></div> <!--留空-->
+  
+  <div  *ngIf="RTCtrl!=null">
+  <div  *ngFor="let group of RTCtrl.getgroups()" >
+  <!--申请消息-->
+  <div *ngIf="RTCtrl.requestslistGroupsMap.get(group.groupid)!=undefined">
+    <ion-list>
+      <div ion-item *ngFor="let request of RTCtrl.requestslistGroupsMap.get(group.groupid).list" type="item-text-wrap" (click)="viewrequestDetail(request)">
+        <div>
+          <span class="request" >[消息]</span><span>{{request.title}}</span>
+        </div>       
+      </div>
+    </ion-list>
+  </div>
+    <!-- bbsitem 列表-->
+    <div *ngIf="RTCtrl.bbs_groups.get(group.groupid)!=undefined">
+      <!----------------本周------------------------>
+        <div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weeklist.length > 0">
+          <div class="midsize">本周</div>      
+        <ion-list>
+        <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weeklist" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+  </div>
+  
+  <h2>
+    <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+  </h2>
+  <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+  <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+      <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+      | {{bbs.lastupdateuser}}
+  </h2>
+  <div> <!--提问问题状态-->
+    <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+    <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+  </div>
+        </div>
+      </ion-list>
+      <!--当weekend < weeklist.length，即当前列表既有本周，也有本周前数据-->
+      <!--div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weekend != -1 && 
+      RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weekend < RTCtrl.bbs_groups.get(group.groupid).getlist().length" class="midsize">
+      本周前
+      </div-->
+      <div class="midsize">本周前</div>
+      <div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weekrestlist.length==0">
+        <div class="midsize">无</div>
+      </div>
+      <!--weeklist.length > 0时，weekend 恒不等于 -1-->
+      <ion-list>
+        <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weekrestlist" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+  </div>
+  
+  <h2>
+    <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+  </h2>
+  <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+  <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+      <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+      | {{bbs.lastupdateuser}}
+  </h2>
+  <div> <!--提问问题状态-->
+    <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+    <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+  </div>
+        </div>
+      </ion-list>
+    </div>
+
+  <!------------------------本月------------------>
+  <div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weeklist.length==0 && RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthlist.length==0">
+    <div class="midsize">本月</div>
+    <div class="midsize">无</div>
+    <div class="midsize">本月前</div>
+    <div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weeklist.length==0 && 
+          RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthrestlist.length==0">
+      <div class="midsize">无</div>
+    </div>
+    <ion-list>
+      <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthrestlist" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+  </div>
+
+  <h2>
+    <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+  </h2>
+  <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+  <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+      <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+      | {{bbs.lastupdateuser}}
+  </h2>
+  <div> <!--提问问题状态-->
+    <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+    <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+  </div>
+      </div>
+    </ion-list>
+  </div>
+  <div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthlist.length > 0">
+    <div class="midsize">本月</div>      
+  <ion-list>
+  <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthlist" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+  </div>
+  
+  <h2>
+    <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+  </h2>
+  <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+  <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+      <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+      | {{bbs.lastupdateuser}}
+  </h2>
+  <div> <!--提问问题状态-->
+    <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+    <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+  </div>
+  </div>
+  </ion-list>
+  <!--div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthend != -1 && 
+        RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthend < RTCtrl.bbs_groups.get(group.groupid).getlist().length" class="midsize">
+        本月前
+  </div-->
+  <div class="midsize">本月前</div>
+  <div *ngIf="RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.weeklist.length==0 && 
+			  RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthrestlist.length==0">
+    <div class="midsize">无</div>
+  </div>
+  <ion-list>
+    <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).thisweekmonth.monthrestlist" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+  </div>
+  
+        <h2>
+          <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+        </h2>
+        <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+        <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+            <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+            | {{bbs.lastupdateuser}}
+        </h2>
+        <div> <!--提问问题状态-->
+          <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+          <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+        </div>
+    </div>
+  </ion-list>
+  </div>
+
+  </div>
+  <div class="midsize red" *ngIf="RTCtrl.hasMoreDataofGroup(group.groupid) == false">已经拉到底了</div>
+  </div>
+</div>
+
+</div>
+   <!--单组浏览模式-->
+
+<!--搜索结果模式  html同喜好模式-->
+<div *ngIf="bSearchResult==true && bCustomizedSingleGroup==false">
+  <div *ngIf="springfestival.isSpringFestival"><br><br><br><br><br><br></div> <!--留空-->
+  <div  *ngIf="RTCtrl!=null && RTCtrl.bbs!=null">
+  <div ion-item *ngFor="let bbs of RTCtrl.bbs.list" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <!--标题 同喜好头条-->
+    <div *ngIf="bbs.isvote==true">
+      <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+      <span *ngIf="bbs.newupdatestatus==0">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+      <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+      <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+      <!--标题：与投票相同，因为标识前缀长度是一样的-->
+      <span *ngIf="bbs.newupdatestatus==0">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+      </span>
+      <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+            <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+            <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+      </span>
+  </div>
+  <div *ngIf="bbs.question_issolved!=-1">
+    <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+    <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+    <!--标题：与投票相同，因为标识前缀长度是一样的-->
+    <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+    </span>
+    <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+    </span>
+</div>
+    <div>
+      <span *ngIf="globals.mult_groups_gp_show_length >= bbs.groupname.length + 4">组：{{bbs.groupname}}
+      </span> 
+      <span *ngIf="globals.mult_groups_gp_show_length < bbs.groupname.length + 4">组：{{bbs.groupname.substring(0, globals.mult_groups_gp_show_length - 4)}}...
+      </span> 
+      </div>
+      <h2>
+        <span>发表：</span> <span *ngIf="bbs.createdate_kind==''">{{bbs.createdate.substring(0,16)}}</span><span *ngIf="bbs.createdate_kind!=''">{{bbs.createdate_kind}} {{bbs.createdate.substring(11,16)}}</span> | <span>{{bbs.authorname}}</span>
+      </h2>
+      <h2 *ngIf="bbs.lastupdatedate==bbs.createdate">更新：无</h2>
+      <h2 *ngIf="bbs.lastupdatedate>bbs.createdate">更新：
+          <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+          | {{bbs.lastupdateuser}}
+      </h2>
+      <div> <!--提问问题状态-->
+        <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+        <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+      </div>
+  </div>
+  <div class="midsize red" *ngIf="RTCtrl.bhasMoreData == false">已经拉到底了</div>
+  </div>
+</div> <!--搜索结果模式-->
+
+<!--多组模式 喜好头条-->
+<div *ngIf="bSearchResult==false && bSingleGroupMode==false">
+  <ion-refresher *ngIf="globals.isLogin==true" (ionRefresh)="doRefresh($event)"> 
+    <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="刷新"
+        refreshingSpinner="circles"
+        refreshingText="更新中..."> 
+    </ion-refresher-content>
+    <ion-refresher-content > 
+  </ion-refresher-content>
+  </ion-refresher>
+  <div *ngIf="springfestival.isSpringFestival"><br><br><br><br><br><br></div> <!--留空-->
+  <div  *ngIf="RTCtrl!=null">
+  <div  *ngFor="let group of RTCtrl.getgroups()" >
+  <div ><ion-row class="midsize favgroupname">{{group.groupname}}</ion-row></div>
+
+  <div *ngIf="RTCtrl.requestslistGroupsMap.get(group.groupid)!=undefined">
+  <!--申请消息-->
+  <ion-list>
+    <div ion-item *ngFor="let request of RTCtrl.requestslistGroupsMap.get(group.groupid).list" type="item-text-wrap" (click)="viewrequestDetail(request)">
+      <div>
+        <span class="request" >[消息]</span><span>{{request.title}}</span>
+      </div>       
+    </div>
+  </ion-list>
+  </div>
+  <!-- bbsitem 列表-->
+  <div *ngIf="RTCtrl.bbs_groups.get(group.groupid)!=undefined">
+  <div ion-item *ngFor="let bbs of RTCtrl.bbs_groups.get(group.groupid).list" type="item-text-wrap" (click)="viewbbsDetail(bbs.groupid, bbs.id, bbs.question_issolved)">
+    <div *ngIf="bbs.isvote==true">
+        <span class="vote" *ngIf="bbs.newupdatestatus==0">[投票]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="vote" >[投票]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="vote" >[投票]</span>
+        <span *ngIf="bbs.newupdatestatus==0">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+        </span>
+        <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+          <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+          <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+        </span>
+    </div>
+    <div *ngIf="bbs.isvote==false && bbs.question_issolved==-1">
+        <span class="discuss" *ngIf="bbs.newupdatestatus==0">[讨论]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="discuss" >[讨论]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="discuss" >[讨论]</span>
+        <!--标题：与投票相同，因为标识前缀长度是一样的-->
+        <span *ngIf="bbs.newupdatestatus==0">
+              <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+              <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+        </span>
+        <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+              <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+              <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+        </span>
+    </div>
+    <div *ngIf="bbs.question_issolved!=-1">
+        <span class="question" *ngIf="bbs.newupdatestatus==0">[提问]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==1">[新帖]</span><span *ngIf="bbs.newupdatestatus==1" class="question" >[提问]</span>
+        <span class="red" *ngIf="bbs.newupdatestatus==2">[更新]</span><span *ngIf="bbs.newupdatestatus==2" class="question" >[提问]</span>
+        <!--标题：与投票相同，因为标识前缀长度是一样的-->
+        <span *ngIf="bbs.newupdatestatus==0">
+              <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 4">{{bbs.title}}</span>
+              <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 4">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 4 - 3)}}...</span>
+        </span>
+        <span *ngIf="bbs.newupdatestatus==1 || bbs.newupdatestatus==2">
+              <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+              <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+        </span>
+    </div>
+    <!--投票，讨论，提问公用 start-->
+    <div>
+    <span *ngIf="globals.mult_groups_gp_show_length >= bbs.groupname.length + 4">组：{{bbs.groupname}} <!--计算上组：的长度-->
+    </span> 
+    <span *ngIf="globals.mult_groups_gp_show_length < bbs.groupname.length + 4">组：{{bbs.groupname.substring(0, globals.mult_groups_gp_show_length - 4)}}...
+    </span> 
+    <!--span>|{{bbs.authorname}}</span-->
+    </div>
+    <div>
+    <span *ngIf="bbs.lastupdatedate==bbs.createdate">发表：</span>   
+    <span *ngIf="bbs.lastupdatedate>bbs.createdate">更新：</span>
+    <span *ngIf="bbs.lastupdatedate_kind==''">{{bbs.lastupdatedate.substring(0,16)}}</span><span *ngIf="bbs.lastupdatedate_kind!=''">{{bbs.lastupdatedate_kind}} {{bbs.lastupdatedate.substring(11,16)}}</span>
+    | 
+    <span *ngIf="bbs.lastupdatedate==bbs.createdate">{{bbs.authorname}}</span>   
+    <span *ngIf="bbs.lastupdatedate>bbs.createdate">{{bbs.lastupdateuser}}</span>
+    <div> <!--提问问题状态-->
+      <span class="red" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==0">{{globals.question_status_wait4answer}}</span>
+      <span class="blue" *ngIf="bbs.question_issolved!=-1 && bbs.question_issolved==1">{{globals.question_status_confirmed}}</span>
+    </div>
+    </div>
+    <!--投票，讨论，提问公用 end-->
+  </div>
+  </div>
+  </div>
+  </div>
+</div>
+<!--多组模式 喜好头条-->
+
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px" immediate-check="false">
+    <ion-infinite-scroll-content
+      loadingText="{{loadMoreScrollText}}">
+    </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <ion-fab right middle>
+      <button ion-fab (click)="clickNewPost()">发帖</button>
+      <button ion-fab (click)="clickNewQuestion()">提问</button>
+    </ion-fab>
+  
+    <ion-fab right bottom #fab>
+      <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+      <ion-fab-list side="left">
+        <button ion-fab (click)="AdvancedSearch($event, fab)">搜索</button>
+        <!--单组条件显示-->
+        <button ion-fab *ngIf="bSearchResult==false && bSingleGroupMode==true" ion-fab (click)="switchMultiplyGroupsMode_UI($event, fab)">多组</button>
+      </ion-fab-list>
+    </ion-fab>
+
+
+</ion-content>
+

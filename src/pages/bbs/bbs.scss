@@ -1,0 +1,24 @@
+page-bbs {
+    .midsize{
+        font-size:2em;
+      }
+    .largesize{
+        font-size:3em;
+    }
+    .vote{color: #0077ff;}
+    .discuss{color: #0d0e0dee;}
+    .question{color: #ff5e00;}
+    .red{color:  #da3b0b;}
+    .blue{color: #0077ff;}
+    .white{color: #fcfdfdef;}
+    .favgroupname{color: #0077ff;}
+
+    .col-10{
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 10%;
+      -moz-box-flex: 0;
+      -moz-flex: 0 0 %10;
+      -ms-flex: 0 0 10%;
+      flex: 0 0 10%;
+    }
+}

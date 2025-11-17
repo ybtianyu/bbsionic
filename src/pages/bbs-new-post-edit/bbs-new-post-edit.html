@@ -1,0 +1,105 @@
+<!--
+  Generated template for the BbsNewPostEditPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<head>
+  <script src="../../../../resources/tinymce/tinymce.min.js"></script>
+  <script>
+    tinymce.init({
+      selector: 'textarea'
+    });
+  </script>
+
+</head>
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>发帖：{{groupname}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>标题</ion-label>
+      <ion-input type="text" [(ngModel)]="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>内容(在下方输入)</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-textarea rows="4" style="position:relative; height: 50%; font-family: inherit; font-size: large;" id="content" placeholder="如题" [(ngModel)]="content"></ion-textarea>
+
+
+
+  <button ion-button color="light"  (click)="onClickBtnUploadPicture()">添加图片</button>
+
+  <div *ngIf="imgUploadPick != null">
+    <div class="row" *ngFor="let i of imgUploadPick.imgUIRowsIndexes">
+    <div class="col col-20"  *ngIf="imgUploadPick.getUploadImageList()[i*5]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5].path}}"/>
+        <div *ngIf="imgUploadPick.getUploadImageList()[i*5].isuploaded==true" style="background:green;">已上传</div>
+        <div *ngIf="imgUploadPick.getUploadImageList()[i*5].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20"  *ngIf="imgUploadPick.getUploadImageList()[i*5+1]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+1].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+1].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+1].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20"  *ngIf="imgUploadPick.getUploadImageList()[i*5+2]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+2].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+2].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+2].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20" *ngIf="imgUploadPick.getUploadImageList()[i*5+3]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+3].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+3].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+3].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20" *ngIf="imgUploadPick.getUploadImageList()[i*5+4]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+4].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+4].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+4].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+  </div>
+  </div>
+  <!-- 投票 -->
+  <div class="midsize row">
+    <div class="col col-5"><ion-checkbox slot="end" [(ngModel)]="bShowVoteUI" ></ion-checkbox></div>
+    <div class="col col-50">投票</div>
+  </div>
+  <div *ngIf="bShowVoteUI==true">
+    <br>
+
+    <div *ngIf="bShowVoteUI">
+      <!--ion-list ion-row  *ngFor="let option of options"-->
+        <!--ion-row-->
+        <div *ngFor="let option of options">
+                <div class="midsize row">
+                    <div class="midsize col col-10">{{option.ID}}</div>
+                    <div class="midsize col col-30"><ion-label>{{option.text}}</ion-label></div>
+                    <div class="col"><button ion-button small color="light"  (click)="delOption(option.index)">删除</button></div>
+                </div>
+        </div>
+        <!--/ion-row-->
+      <!--/ion-list-->
+      </div>
+    <ion-list>
+      <ion-item>
+        <ion-label></ion-label>
+          <ion-input type="text"  *ngIf="bShowVoteUI" placeholder={{optionplaceholder}} [(ngModel)]="optionText" (focus)="focusOptionText()">添加投票选项</ion-input>
+      </ion-item>
+    </ion-list>
+    <button *ngIf="bShowVoteUI" ion-button small color="light"  (click)="newOption()">添加选项</button>
+        <!--ion-row>
+          <button *ngIf="bShowVoteUI" ion-button color="light"  (click)="setVoters()">设置投票人员</button>
+        </ion-row-->
+
+  </div>
+  <br>
+  <br>
+  <button ion-button  (click)="newPost()">提交</button>
+</ion-content>

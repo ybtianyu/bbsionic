@@ -1,0 +1,66 @@
+<!--
+  Generated template for the FriendGroupConfigPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>设置友邻发起组</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<div class="midsize">
+  <ion-row>
+      <ion-col><span>友邻发起组</span></ion-col>
+      <ion-col><span>管理员</span></ion-col>
+      <ion-col><span>&nbsp;&nbsp;</span></ion-col>
+  </ion-row>
+  <ion-row *ngIf="group.friendVisitFromGroups.length==0">无</ion-row>
+  <ion-list>
+
+      <ion-row ion-item *ngFor="let friendfromgroup of group.friendVisitFromGroups">
+        <ion-col><span>{{friendfromgroup.groupname}}</span></ion-col>
+        <ion-col><span>{{friendfromgroup.admin}}</span></ion-col>
+        <ion-col><span><button ion-button small (click)="delFriendVisitFromGroup(friendfromgroup)">删除</button></span></ion-col>
+      </ion-row>
+  </ion-list>
+
+  <!--搜索组添加为友邻发起组-->
+  <!--ion-label>搜索要添加为友邻的组</ion-label>
+  <ion-list>
+      <ion-item>
+        <ion-label fixed>组名的全部或一部分</ion-label>
+        <ion-input type="text" [(ngModel)]="name_input"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button ion-button (click)="searchGroup(name_input)">搜索</button>
+      </ion-item>
+    </ion-list>
+    <ion-label>搜索结果：</ion-label>
+    <ion-label>{{searchNoneText}}</ion-label>
+
+    <ion-row>
+        <ion-col><ion-label fixed>组</ion-label></ion-col>
+        <ion-col><ion-label fixed>人数</ion-label></ion-col>
+        <ion-col><ion-label fixed>管理员</ion-label></ion-col>
+        <ion-col><ion-label fixed>公开组/私有组</ion-label></ion-col>
+        <ion-col><ion-label fixed>&nbsp;&nbsp;</ion-label></ion-col>
+        <ion-col><ion-label fixed>&nbsp;&nbsp;</ion-label></ion-col>
+      </ion-row>
+    <ion-list ion-row *ngFor="let group of searchgrouplist">
+      <ion-row>
+      <ion-col><ion-label fixed>{{group.groupname}}</ion-label></ion-col>
+      <ion-col><ion-label fixed>{{group.memberNbr}}</ion-label></ion-col>
+      <ion-col><ion-label fixed>{{group.admin}}</ion-label></ion-col>
+      <ion-col><ion-label fixed *ngIf="group.isprivate==true">私有</ion-label></ion-col>
+      <ion-col><ion-label fixed *ngIf="group.isprivate==false">公开</ion-label></ion-col>
+      <ion-col><button ion-button (click)="addFriendVisitFromGroup(group.groupid)">选择</button></ion-col>
+    </ion-row>
+    </ion-list-->
+</div>
+</ion-content>

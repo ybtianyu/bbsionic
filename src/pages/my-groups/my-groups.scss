@@ -1,0 +1,21 @@
+page-my-groups {
+  .midsize{
+    font-size:2em;
+  }
+    .col-30{
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 30%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 %30;
+        -ms-flex: 0 0 30%;
+        flex: 0 0 30%;
+      }
+      .col-40{
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 40%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 %40;
+        -ms-flex: 0 0 40%;
+        flex: 0 0 40%;
+      }
+}

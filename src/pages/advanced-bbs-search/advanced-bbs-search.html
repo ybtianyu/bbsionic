@@ -1,0 +1,141 @@
+<!--
+  Generated template for the AdvancedBbsSearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>搜索选项</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div padding>
+    <ion-segment [(ngModel)]="searchtype">
+      <ion-segment-button value="bbs">
+        文章
+      </ion-segment-button>
+      <ion-segment-button value="pictures">
+        图片
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="searchtype">
+    <div *ngSwitchCase="'bbs'">
+      <ion-list>
+        <ion-item>
+          <ion-label fixed>搜索关键字</ion-label>
+          <ion-input type="text" [(ngModel)]="search_key"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div class="midsize row">
+        <div class="col col-5"><ion-checkbox slot="end" [(ngModel)]="buseMoreSearchOpts" (ionChange)="onSwitchMoreSearchOpts($event)"></ion-checkbox></div>
+        <div class="col col-50">更多选项</div>
+      </div>
+      <div *ngIf="buseMoreSearchOpts==true">
+        <br>
+        <!--button ion-button small (click)="onClearAdvancedOpt()">清除</button-->      
+        <ion-list>
+          <ion-item>
+            <ion-label>发帖时间最早</ion-label>
+            <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="postdatebegin_key"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>发帖时间最晚</ion-label>
+            <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="postdateend_key"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label fixed>作者</ion-label>
+            <ion-input type="text" [(ngModel)]="author_key"></ion-input>
+            <button ion-button small>选择</button>
+          </ion-item>
+    
+        </ion-list>
+        </div>
+      <button ion-button (click)="SearchPosts()">搜索</button>
+      <div class="midsize row">搜索范围  全选<ion-checkbox slot="end" [(ngModel)]="ckctrlallgp.bAllChecked" (ionChange)="onSwitchAllGroupsChecked($event)"></ion-checkbox></div>
+      <ion-list ion-row *ngFor="let group of groups">
+        <ion-row>
+        <div class="midsize row">
+          <div class="col col-5"><ion-checkbox slot="end" [(ngModel)]="group.ischecked" (ionChange)="onSwitchGroupChecked(group, $event)"></ion-checkbox></div>
+          <div class="col">{{group.group.groupname}}</div>        
+        </div>
+        </ion-row>
+      </ion-list>
+    
+      <ion-row>
+        <ion-col><button ion-button (click)="searchMyPosts()">我发的贴</button></ion-col>
+        <ion-col><button ion-button (click)="searchMyQuestions()">我提的问</button></ion-col>
+      </ion-row>
+    </div>
+
+
+    <!--------------  图片 -------------------------->
+    <div *ngSwitchCase="'pictures'">
+      <div class="midsize row">
+        <div class="col col-5"><ion-checkbox slot="end" [(ngModel)]="buseMoreSearchOpts" (ionChange)="onSwitchMoreSearchOpts($event)"></ion-checkbox></div>
+        <div class="col col-50">更多选项</div>
+      </div>
+      <div *ngIf="buseMoreSearchOpts==true">
+        <br>
+        <ion-list>
+          <ion-item>
+            <ion-label>发帖时间最早</ion-label>
+            <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="postdatebegin_key"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>发帖时间最晚</ion-label>
+            <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="postdateend_key"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>在下面分组里面勾选筛选功能</ion-label>
+          </ion-item>
+        </ion-list>
+        </div>
+    
+        <div><button ion-button (click)="SearchImages()">搜索</button></div>
+        <br>
+        <div class="row">
+          <ion-checkbox slot="end" [(ngModel)]="isRoAndRo" (ionChange)="onSwitchLogicRoAndRo($event)"></ion-checkbox>
+          选择的筛选对象同时在图片
+        </div>
+        <br>
+        <div class="midsize row">搜索范围  全选<ion-checkbox slot="end" [(ngModel)]="ckctrlallgp.bAllChecked" (ionChange)="onSwitchAllGroupsChecked($event)"></ion-checkbox></div>
+        <ion-list ion-row *ngFor="let group of groups">
+          
+          <div class="midsize row">
+            <div class="col col-5"><ion-checkbox slot="end" [(ngModel)]="group.ischecked" (ionChange)="onSwitchGroupChecked(group, $event)"></ion-checkbox></div>
+            <div class="col">{{group.group.groupname}}</div>        
+          </div>
+         
+          <div *ngIf="buseMoreSearchOpts==true && group.ischecked==true">            
+              <div>
+                <ion-checkbox *ngIf="grom.getGro(group.group.groupid).ros.length>0" slot="end" [(ngModel)]="grom.gfilterswitch[group.index]" (ionChange)="onSwitchGroupFilterChecked(group, $event)"></ion-checkbox>
+                <ion-checkbox *ngIf="grom.getGro(group.group.groupid).ros.length==0" slot="end" disabled="disabled" [(ngModel)]="grom.gfilterswitch[group.index]" (ionChange)="onSwitchGroupFilterChecked(group, $event)"></ion-checkbox>
+                筛选
+              </div>
+              <div>
+              <div class="col col-12"></div>
+              <div *ngIf="grom.getGro(group.group.groupid).ischecked==true" class="col">
+                  <div>
+                    <ion-checkbox slot="end" [(ngModel)]="grom.getGro(group.group.groupid).isAllrochecked" (ionChange)="onSwitchGroAllRoChecked(group, $event)"></ion-checkbox>
+                    (以下)全选
+                  </div>
+                <div>
+                  <span *ngFor="let ro of grom.getGro(group.group.groupid).ros">
+                    <ion-checkbox slot="end" [(ngModel)]="ro.ischecked" (ionChange)="onSwitchRoChecked(group.group.groupid, ro, $event)"></ion-checkbox>
+                    {{ro.name}}
+                  </span>
+                </div>  
+              </div>  
+              </div>          
+        </div>
+        </ion-list>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>homepage</title>
+</head>
+<body>
+<!--div class="tabs">
+  <a class="tab-item">
+    主页
+  </a>
+  <a class="tab-item">
+    收藏
+  </a>
+  <a class="tab-item">
+    设置
+  </a>
+</div-->
+<ion-tabs>
+  <ion-tab tabIcon="heart" tabTitle="我的圈" [root]="tabmybbs"></ion-tab>
+  <ion-tab tabIcon="star" tabTitle="部落" [root]="WideSocialPage"></ion-tab>
+  <ion-tab tabIcon="star" tabTitle="我" [root]="tabme"></ion-tab>
+</ion-tabs>
+
+
+<!--ion-tabs class="tabs-icon-only tabs-icon-top ">
+
+  <ion-tab title="首页" href="#/tabs/home" icon-on="ion-new-home-off" icon-off="ion-new-home">
+    <ion-nav-view name="tab-home"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="淘宝" href="#/tabs/taobao" icon-off="ion-new-tf" icon-on="ion-new-tf-off">
+    <ion-nav-view name="tab-taobao"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="好货" icon-off="ion-new-zhemai" icon-on="ion-new-zhemai-off">
+  </ion-tab>
+
+  <ion-tab title="我的" href="#/tabs/user" icon-off="ion-new-user" icon-on="ion-new-user-off">
+    <ion-nav-view name="tab-user"></ion-nav-view>
+  </ion-tab>
+</ion-tabs-->
+
+<!--ion-tabs class="tabs-positive tabs-icon-only">
+
+  <ion-tab title="首页" icon-on="ion-ios-home" icon-off="ion-ios-home-outline">
+    <ion-view>
+      <ion-content class="calm-bg">
+        tab 1 content
+      </ion-content>
+    </ion-view>
+  </ion-tab>
+
+  <ion-tab title="关于" icon-on="ion-ios-clock" icon-off="ion-ios-clock-outline">
+    <ion-view>
+      <ion-content class="balanced-bg">
+        tab 2 content
+      </ion-content>
+    </ion-view>
+  </ion-tab>
+
+  <ion-tab title="设置" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline">
+    <ion-view>
+      <ion-content class="energized-bg">
+        tab 2 content
+      </ion-content>
+    </ion-view>
+  </ion-tab>
+</ion-tabs-->
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!--
+  Generated template for the GroupInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>组：{{groupname}}{{pageTitlefriendvisit_suffix}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<!--简洁型group-info，从search-tribe页面中打开 start-->
+<div *ngIf="brief==true">
+<ion-row><button ion-button (click)="showGroupIntroductions(groupid)">简介</button></ion-row>
+<ion-row *ngIf="group.ismember==true || bgisprivate==false"><button ion-button (click)="showGroupMemberPage(groupid)">查看组成员</button></ion-row>
+<ion-row *ngIf="group.ismember==true || bgisprivate==false"><button ion-button (click)="viewGroupConfig(groupid)">查看设置</button></ion-row>
+<ion-row *ngIf="group.isprivate==true"> <button ion-button (click)="joinPrivateGroup(group)">加入</button></ion-row>
+<ion-row *ngIf="group.isbrowsable==false"><button ion-button (click)="requestFriendVisit(group)">友邻</button></ion-row>
+</div><!--简洁型group-info，从search-tribe页面中打开 end-->
+
+<!--详细型group-info start-->
+<div *ngIf="brief==false">
+<!--非友邻组成员 start-->
+<ion-list  *ngIf="bgpmember==true">
+  <ion-row><button ion-button (click)="showGroupIntroductions(groupid)">简介</button></ion-row>
+  <ion-row><button ion-button (click)="showGroupMemberPage(groupid)">查看组成员</button></ion-row>
+  <ion-row><button ion-button (click)="invitePersonPage(groupid)">添加组成员</button></ion-row>
+  <ion-row><button ion-button *ngIf="bgpAdmin==false" (click)="viewGroupConfig(groupid)">查看设置</button></ion-row>
+  <ion-row><button ion-button *ngIf="bgpAdmin==true" (click)="configGroupPage(groupid)">设置</button></ion-row>
+  <ion-row><button ion-button (click)="RO(groupid)">图像标注对象</button></ion-row>
+  <ion-row><button ion-button (click)="markImages(groupid)">图像标注</button></ion-row>
+  <ion-row><button ion-button *ngIf="bgpAdmin==false" (click)="exitGroup(groupid)">退出组</button></ion-row>
+</ion-list>
+<!--非友邻组成员 end-->
+
+<!--友邻组 start-->
+<ion-list *ngIf="bgpmember==false && bfriendvisit">
+  <ion-row><button ion-button (click)="showGroupIntroductions(groupid)">简介</button></ion-row>
+  <br>
+  <!--div *ngIf="" class="midsize">隐私：公开</div> <div class="midsize">隐私：公开</div-->
+  <br>
+  <br>
+  <div class="midsize">友邻源：{{friendvisitedfromgnames}}</div>
+  <br>
+  <ion-row class="midsize prompt">用户通过友邻源能够访问该友邻组，友邻源是该友邻组的友邻发起组中用户加入了的组</ion-row>
+</ion-list>
+<!--友邻组 end-->
+
+<!--非成员，非友邻组 退出组后的情况start-->
+<ion-list *ngIf="bgpmember==false && bfriendvisit==false">
+  <ion-row><button ion-button (click)="showGroupIntroductions(groupid)">简介</button></ion-row>
+  <div class="midsize">该组不在你的组范围内</div>
+</ion-list>
+<!--非成员，非友邻组 退出组后的情况end-->
+</div> <!--详细型group-info end-->
+
+</ion-content>

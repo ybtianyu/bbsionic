@@ -1,0 +1,71 @@
+<!--
+  Generated template for the BbsNewPostEditPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<head>
+  <script src="../../../../resources/tinymce/tinymce.min.js"></script>
+  <script>
+    tinymce.init({
+      selector: 'textarea'
+    });
+  </script>
+
+</head>
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>提问：{{groupname}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>标题</ion-label>
+      <ion-input type="text" [(ngModel)]="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>内容</ion-label>
+    </ion-item>
+  </ion-list>
+ <ion-textarea rows="4" style="font-family: inherit; font-size: large;" id="content" placeholder="如题" [(ngModel)]="content"></ion-textarea>
+
+	<ion-item>
+      <button ion-button color="light"  (click)="onClickBtnUploadPicture()">添加图片</button>
+  </ion-item>
+  <div *ngIf="imgUploadPick != null">
+    <div class="row" *ngFor="let i of imgUploadPick.imgUIRowsIndexes">
+    <div class="col col-20"  *ngIf="imgUploadPick.getUploadImageList()[i*5]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5].path}}"/>
+        <div *ngIf="imgUploadPick.getUploadImageList()[i*5].isuploaded==true" style="background:green;">已上传</div>
+        <div *ngIf="imgUploadPick.getUploadImageList()[i*5].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20"  *ngIf="imgUploadPick.getUploadImageList()[i*5+1]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+1].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+1].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+1].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20"  *ngIf="imgUploadPick.getUploadImageList()[i*5+2]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+2].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+2].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+2].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20" *ngIf="imgUploadPick.getUploadImageList()[i*5+3]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+3].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+3].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+3].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+    <div class="col col-20" *ngIf="imgUploadPick.getUploadImageList()[i*5+4]!=undefined" on-drag-left="onDragLeft()" on-drag-right="onDragRight()"><img src="{{imgUploadPick.getUploadImageList()[i*5+4].path}}"/>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+4].isuploaded==true" style="background:green;">已上传</div>
+      <div *ngIf="imgUploadPick.getUploadImageList()[i*5+4].isuploaded==false" style="background:red;">未上传</div>
+    </div>
+  </div>
+  </div>
+
+  <br>
+  <br>
+  <ion-col><button ion-button  (click)="newPost()">提交</button></ion-col>
+</ion-content>

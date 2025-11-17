@@ -1,0 +1,32 @@
+<!--
+  Generated template for the ImageBrowserPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>对象</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<body ng-controller="GroupReferredObjectsPage">
+
+  <!--Ro显示-->
+  <div *ngIf="rop != null">
+    <ion-item *ngFor="let ro of rop.gros">
+      {{ro.name}}
+    </ion-item>
+  </div>
+  <ion-item *ngIf="ro!=null">
+    <ion-input placeholder="输入名称，取消则点击上方导航返回" [(ngModel)]="ro.name"></ion-input>
+  </ion-item>
+  
+  <button ion-button *ngIf="isAdmin && ro==null" (click)="onAddRo()">添加</button>
+  <button ion-button *ngIf="isAdmin && ro!=null" (click)="onSaveRo()">保存</button>
+
+  <div>
+
+  </div>
+
+</body>

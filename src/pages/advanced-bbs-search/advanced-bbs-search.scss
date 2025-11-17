@@ -1,0 +1,22 @@
+page-advanced-bbs-search {
+    .midsize{
+        font-size:2em;
+      }
+      .orange{color: #ff5e00;}
+      .col-5{
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 5%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 %5;
+        -ms-flex: 0 0 5%;
+        flex: 0 0 5%;
+      }
+      .col-50{
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 50%;
+        -moz-box-flex: 0;
+        -moz-flex: 0 0 %50;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+      }
+}

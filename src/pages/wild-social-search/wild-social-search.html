@@ -1,0 +1,80 @@
+<!--
+  Generated template for the WildSocialSearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <div class="col" *ngIf="springfestival.isSpringFestival"> <!--新年快乐-->
+    <img src="{{globals.server}}img_system/newspring2.png"/>  <!--节日祝福-->
+  </div>
+</ion-header>
+
+
+<ion-content padding>
+  <div><button ion-button small (click)="switchWideSocialHome()">返回</button></div>
+  <br>
+    <div class="midsize row">
+        <div class="col col-20">名称</div>
+        <div class="col col-60"><ion-input type="text" color="danger" autofocus="true" [(ngModel)]="name_input"></ion-input></div>
+        <div class="col"><button ion-button small (click)="searchGroupByName(name_input)">搜索</button></div>
+    </div>
+    
+    <!--div *ngIf="groupTags==null" class="midsize row">
+      常用标签获取失败
+    </div>
+    <div *ngIf="groupTags!=null">
+      <div class="midsize row">
+          常用标签
+      </div>
+
+      <div class="midsize row">
+          <button ion-button small color="light" *ngFor="let tag of groupTags" (click)="searchGroupsByTag(tag.tagname)">{{tag.tagname}}</button> 
+      </div>
+  </div-->
+<!--搜索groups结果-->
+  <div class="midsize row" *ngIf="RTCtrl != null && RTCtrl.bhasReceivedLastData == true && RTCtrl.searchrlts.getlist().length == 0">
+    <div class="col">{{searchNoneText}}</div>
+  </div>
+  <div *ngIf="RTCtrl != null && RTCtrl.searchrlts.getlist().length > 0">
+  <ion-list>
+  <div class="row midsize">
+    <div class="col col-20">名称</div>
+    <div class="col col-15">人数</div>
+    <div class="col col-15">隐私</div>
+    <!--div class="col col-15">管理员</div-->
+    <div class="col col-50">   </div>
+  </div>
+
+  </ion-list>
+
+  <ion-list>
+  <div *ngFor="let group of RTCtrl.searchrlts.getlist()">
+  <div class="row midsize">
+
+      <div class="col col-20">{{group.groupname}}</div>
+      <div class="col col-15">{{group.memberNbr}}</div>
+      <div class="col col-15" *ngIf="group.isprivate==true">私有</div>
+      <div class="col col-15" *ngIf="group.isprivate==false">公开</div>
+      <!--div class="col col-25">{{group.admin}}</div-->
+
+    <div class="col col-50">
+
+      <span *ngIf="group.isprivate==true"> <button small ion-button (click)="viewGroupInfoPage(group)">查看</button></span>
+
+      <span *ngIf="group.isprivate==false"> <button small ion-button (click)="enterGroupbbs(group)">进入</button></span>      
+      <span *ngIf="group.isprivate==false"> <button small ion-button (click)="viewGroupInfoPage(group)">查看</button></span>
+
+    </div>
+  </div>
+  </div>
+  </ion-list>
+
+  <div class="midsize red" *ngIf="RTCtrl.bhasMoreData == false">已经拉到底了</div>
+  </div>
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px" immediate-check="false">
+    <ion-infinite-scroll-content
+      loadingText={{globals.loadMoreScrollText}}>
+    </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

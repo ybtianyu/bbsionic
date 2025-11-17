@@ -1,0 +1,40 @@
+<!--
+  Generated template for the UserRequestConfirmPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>设置故事时间</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <label>设置年月日</label>
+  <br>
+  <ion-item>
+    <ion-label>日期</ion-label>
+    <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="storydate.date"></ion-datetime>
+  </ion-item>
+  <ion-checkbox [(ngModel)]="storydate.enabled_ymd_exclude"></ion-checkbox>设置时点
+  <br />
+  <div *ngIf="storydate.enabled_ymd_exclude==true">
+    <ion-checkbox [(ngModel)]="storydate.bMorning" (click)="storydate.setMorning(storydate.bMorning)"></ion-checkbox>上午
+    <ion-checkbox [(ngModel)]="storydate.bAfternoon" (click)="storydate.setAfternoon(storydate.bAfternoon)"></ion-checkbox>下午
+    
+    <div class="row">
+      <div class="col"><ion-checkbox [(ngModel)]="storydate.enabled_clock"></ion-checkbox></div>
+      <div *ngIf="storydate.enabled_clock==true" class="col"><ion-input [(ngModel)]="clock" ></ion-input></div>
+      <div *ngIf="storydate.enabled_clock==false" class="col"><ion-input disabled="disabled" [(ngModel)]="clock" ></ion-input></div>
+      <div class="col">点</div>
+    </div>
+  </div>
+  
+  <button (click)="cancel()">取消</button>
+  <button (click)="sendRequest(storydate)">提交</button>
+
+</ion-content>

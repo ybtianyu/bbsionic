@@ -1,0 +1,60 @@
+<!--
+  Generated template for the GroupConfigPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>设置组 {{group.groupname}} </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<!--管理员 start-->
+<div *ngIf="bgpAdmin==true && disableAdminconfig==false">
+  <div class="midsize row">
+    <ion-label>公开</ion-label>
+    <ion-toggle [(ngModel)]="!group.isprivate" (ionChange)="onChangePrivateSwitch()"></ion-toggle>
+  </div>
+
+  <div class="midsize row">
+    <ion-label>友邻发起组</ion-label>
+    <ion-label>{{friendvisitFromGroupsName}}</ion-label>
+    <button ion-button small *ngIf="group.isprivate==true" (click)="setFriendVisitFromGroups(group.groupid)">设置</button>
+  </div>
+  <!--div class="midsize row">
+    <ion-label>友邻组</ion-label>
+    <ion-label>{{friendGroupsName}}</ion-label>
+    <button ion-button small *ngIf="group.isprivate==true" (click)="setFriendVisitFromGroups(group.groupid)">设置</button>
+  </div-->
+  <!--div class="midsize row">
+    <ion-label>分类标签</ion-label><ion-label>{{tagstext}}</ion-label>
+    <button ion-button small (click)="setGroupTag(group.groupid)">设置</button>
+  </div-->
+
+</div>
+<!--管理员 end-->
+<!--非管理员 start-->
+<div *ngIf="(bgpMember==true && disableAdminconfig==true) || (group.isprivate==false && disableAdminconfig==true)">
+    <ion-list>
+      <ion-item><ion-label>公开/私有</ion-label>
+        <ion-label *ngIf="group.isprivate==false">公开</ion-label>
+        <ion-label *ngIf="group.isprivate==true">私有</ion-label>
+      </ion-item>
+      <ion-item><ion-label>友邻发起组</ion-label><ion-label>{{friendvisitFromGroupsName}}</ion-label>
+      </ion-item>
+      <!--ion-item><ion-label>友邻组</ion-label><ion-label>{{friendGroupsName}}</ion-label>
+      </ion-item-->
+      <!--ion-item><ion-label>分类标签</ion-label><ion-label>{{tagstext}}</ion-label>
+      </ion-item-->
+    </ion-list>
+</div>
+<!--非管理员 end-->
+  <br>
+  <div class="midsize prompt">友邻发起组：所有有权限查看本组的消息和帖子的其他组</div>
+  <!--div class="midsize prompt">友邻组：本组可以查看的其他组</div-->
+</ion-content>

@@ -1,0 +1,29 @@
+<!--
+  Generated template for the ImageBrowserPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<body ng-controller="MarkImageBrowserPage">
+
+<div style="position: absolute; top: 0%; width: 100%; height: 100%; background-color:black;">
+  <div on-tap="onTap()" on-swip-left="onSwipLeft()" on-swip-right="onSwipRight()">
+    <img src="{{globals.server}}{{bbsimageslist[bbsindex].getImages()[imageindex].path}}"/>
+  </div>
+  <!--提示信息-->
+  <div class="midsize" style="position: absolute; top: 0%; width: 100%; background-color: greenyellow;" 
+      (click)="onTap()">点击图片返回</div>
+  <!--Ro显示-->
+  <div *ngIf="rop != null" style="position: absolute; bottom: 40%; left : 0%; width: 100%; background-color: white;">
+    <span *ngFor="let ro of rop.gros">
+      <ion-checkbox [(ngModel)]="ro.ischecked" (ionChange)="onSwitchRoChecked(ro, $event)"></ion-checkbox>
+      <span class="midsize">{{ro.name}}</span>
+    </span>
+  </div>
+  <div  style="position: absolute; bottom: 0%; left : 40%;">
+      <button ion-button (click)="onSubmitMarkRo()">保存</button>
+  </div>
+
+</div>
+
+</body>

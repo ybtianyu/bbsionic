@@ -1,0 +1,61 @@
+page-bbs-detail {
+  .datefontsize{
+    font-size:1.6em;
+  }
+  .underline{
+    text-decoration:underline
+  }
+
+  .titlesize{
+    font-size:2em;
+  }
+  .midsize{
+    font-size:2em;
+  }
+  .voted{color:#23bb158e}
+  .unvoted{color: #ff8800d7;}
+  .view{color: #0077ff;}
+  .dianzan{color: #ff8800d7;}
+  .grey{color: #ac9c93;}
+  .hightlight{color: #0077ff;}
+
+  .col-10{
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 10%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 %10;
+    -ms-flex: 0 0 10%;
+    flex: 0 0 10%;
+  }
+  .col-20{
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 20%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 %20;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+  }
+  .col-50{
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 50%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 %50;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+  }
+  .col-80{
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 80%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 %80;
+    -ms-flex: 0 0 80%;
+    flex: 0 0 80%;
+  }
+      ion-popover-view.fit {
+        width: auto;
+        height: auto;
+        ion-content {
+          position: relative;
+        }
+      }
+}

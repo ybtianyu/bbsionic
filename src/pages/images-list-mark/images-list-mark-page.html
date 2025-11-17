@@ -1,0 +1,54 @@
+<!--
+  Generated template for the ImageBrowserPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <!--script src="E:/ionic/hello/node_modules/vconsole/distvconsole.min.js"></script>
+  <script>
+    var vConsole = new VConsole();
+    console.log("hello world");
+  </script-->
+  <ion-navbar>
+    <ion-title>图片</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+<div *ngIf="rtctrl != null">
+<div *ngIf="rtctrl.getRSTList()!=null">
+    <div  *ngFor="let mark of rtctrl.getRSTList().calendarMarks" >
+      <ion-row class="midsize">{{mark.yearmonth}}</ion-row><br>
+      <ion-list>
+        <div ion-item *ngFor="let bbs of mark.bbslist" type="item-text-wrap">
+        <div>
+        <span>{{bbs.createdate}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length >= bbs.title.length + 8">{{bbs.title}}</span>
+        <span *ngIf="globals.mult_groups_title_show_length < bbs.title.length + 8">{{bbs.title.substring(0,globals.mult_groups_title_show_length - 8 - 3)}}...</span>
+        </div>
+          <!--显示图片-->
+          <div class="row" *ngFor="let i of bbs.imagesui.imgUIRows">
+            <div class="col"><img *ngIf="bbs.getImages()[i*bbs.imagesui.rowcount]!=undefined" (click)="viewImages(bbs.itemid, i*bbs.imagesui.rowcount)" src="{{globals.server}}{{bbs.getImages()[i*bbs.imagesui.rowcount].path}}"/></div>
+            <div class="col"><img *ngIf="bbs.getImages()[i*bbs.imagesui.rowcount+1]!=undefined" (click)="viewImages(bbs.itemid, i*bbs.imagesui.rowcount+1)" src="{{globals.server}}{{bbs.getImages()[i*bbs.imagesui.rowcount+1].path}}"/></div>
+            <div class="col"><img *ngIf="bbs.getImages()[i*bbs.imagesui.rowcount+2]!=undefined" (click)="viewImages(bbs.itemid, i*bbs.imagesui.rowcount+2)" src="{{globals.server}}{{bbs.getImages()[i*bbs.imagesui.rowcount+2].path}}"/></div>
+            <div class="col"><img *ngIf="bbs.getImages()[i*bbs.imagesui.rowcount+3]!=undefined" (click)="viewImages(bbs.itemid, i*bbs.imagesui.rowcount+3)" src="{{globals.server}}{{bbs.getImages()[i*bbs.imagesui.rowcount+3].path}}"/></div>
+            <div class="col"><img *ngIf="bbs.getImages()[i*bbs.imagesui.rowcount+4]!=undefined" (click)="viewImages(bbs.itemid, i*bbs.imagesui.rowcount+4)" src="{{globals.server}}{{bbs.getImages()[i*bbs.imagesui.rowcount+4].path}}"/></div>
+          </div>
+        </div>
+      </ion-list>
+
+    </div>
+    <div class="midsize red" *ngIf="rtctrl.bhasMoreData == false">已经拉到底了</div>
+
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px" immediate-check="false">
+      <ion-infinite-scroll-content
+        loadingText="{{loadMoreScrollText}}">
+      </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+  </div>
+  </ion-content>
+
